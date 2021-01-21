@@ -1,38 +1,51 @@
-import WavePoint from "./wavePoint";
+import WavePoint, {IWavePointOptions} from "./wavePoint";
 import randomColor from "./randomColorUtil";
 
-const DEFAULT_WAVE_POINT_SIZE = 6;
+export interface IWaveOption {
+    fillStyle?: string;
+    waveHeight?: number;
+    interval?: number;
+    speed?: number;
+}
 
 class Wave {
     private readonly width: number;
     private readonly height: number;
     private readonly wavePointSize: number;
     private readonly wavePoints: WavePoint[];
-    private readonly defaultFillStyle: string = randomColor();
+    private readonly fillStyle: string;
+    private readonly waveHeight: number;
+    private readonly speed: number;
 
-    constructor(width: number, height: number, interval: number = DEFAULT_WAVE_POINT_SIZE) {
+    constructor(width: number, height: number, option?: IWaveOption) {
         this.width = width;
         this.height = height;
-        this.wavePointSize = Math.max(interval, 2);
+        this.wavePointSize = Math.max((option?.interval || 0), 3);
+        this.fillStyle = option?.fillStyle || randomColor();
+        this.waveHeight = option?.waveHeight || this.height / 4;
+        this.speed = option?.speed || 0.1;
         this.wavePoints = this.createWavePoints(this.wavePointSize);
-        console.log(this.wavePoints);
     }
 
     private createWavePoints = (size: number): WavePoint[] => {
         const interval = this.width / (size - 1);
         const positionY = this.height / 2;
+        const option: IWavePointOptions = {
+            speed: this.speed,
+            height: this.waveHeight
+        };
         return (
             [...Array(size)].map((_, index) => (
-                new WavePoint(index, interval * index, positionY)
+                new WavePoint(index, interval * index, positionY, option)
             ))
         );
     };
 
-    draw = (ctx: CanvasRenderingContext2D, fillStyle: string = this.defaultFillStyle) => {
+    draw = (ctx: CanvasRenderingContext2D) => {
         let prevX = this.wavePoints[0].x;
         let prevY = this.wavePoints[0].y;
         ctx.beginPath();
-        ctx.fillStyle = fillStyle;
+        ctx.fillStyle = this.fillStyle;
 
         this.wavePoints.forEach((wavePoint, index) => {
             if (index === 0) {

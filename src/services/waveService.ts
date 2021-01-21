@@ -1,4 +1,4 @@
-import Wave from "../utils/wave";
+import Wave, {IWaveOption} from "../utils/wave";
 
 class WaveService {
     ctx: CanvasRenderingContext2D;
@@ -17,7 +17,12 @@ class WaveService {
     };
 
     updateWave = () => {
-        this.wave = new Wave(this.width, this.height, 12);
+        const option: IWaveOption =  {
+            fillStyle: 'red',
+            interval: 6,
+            speed: 0.1
+        };
+        this.wave = new Wave(this.width, this.height, option);
     };
 
     animate = () => {
