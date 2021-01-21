@@ -11,9 +11,9 @@ const DEFAULT_OPTIONS = {
 class WavePoint {
     x: number;
     y: number;
-    private fixedY: number;
     private sinX: number;
-    private options: options;
+    private readonly fixedY: number;
+    private readonly options: options;
 
     constructor(index: number, x: number, y: number, options: options = DEFAULT_OPTIONS) {
         this.x = x;
@@ -23,7 +23,7 @@ class WavePoint {
         this.sinX = index;
     };
 
-    private update = () => {
+    update = () => {
         const {
             speed = DEFAULT_OPTIONS.speed,
             height = DEFAULT_OPTIONS.height
@@ -31,15 +31,6 @@ class WavePoint {
 
         this.sinX += speed;
         this.y = this.fixedY + (Math.sin(this.sinX) * height);
-    };
-
-    draw = (ctx: CanvasRenderingContext2D) => {
-        this.update();
-        ctx.beginPath();
-        ctx.fillStyle = 'red';
-        ctx.arc(this.x, this.y, 30, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
     };
 }
 
