@@ -6,6 +6,7 @@ export interface IWaveOption {
     waveHeight?: number;
     interval?: number;
     speed?: number;
+    startPoint?: number;
 }
 
 class Wave {
@@ -16,6 +17,7 @@ class Wave {
     private readonly fillStyle: string;
     private readonly waveHeight: number;
     private readonly speed: number;
+    private readonly startPoint: number;
 
     constructor(width: number, height: number, option?: IWaveOption) {
         this.width = width;
@@ -24,6 +26,7 @@ class Wave {
         this.fillStyle = option?.fillStyle || randomColor();
         this.waveHeight = option?.waveHeight || this.height / 4;
         this.speed = option?.speed || 0.1;
+        this.startPoint = option?.startPoint || Math.floor(Math.random() * 10000);
         this.wavePoints = this.createWavePoints(this.wavePointSize);
     }
 
@@ -36,7 +39,7 @@ class Wave {
         };
         return (
             [...Array(size)].map((_, index) => (
-                new WavePoint(index, interval * index, positionY, option)
+                new WavePoint(this.startPoint + index, interval * index, positionY, option)
             ))
         );
     };

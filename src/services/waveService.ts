@@ -1,4 +1,5 @@
 import Wave, {IWaveOption} from "../utils/wave";
+import randomColor from "../utils/randomColorUtil";
 
 class WaveService {
     ctx: CanvasRenderingContext2D;
@@ -18,9 +19,11 @@ class WaveService {
 
     updateWave = () => {
         const option: IWaveOption =  {
-            fillStyle: 'red',
+            fillStyle: randomColor(),
+            waveHeight: 150,
             interval: 6,
-            speed: 0.1
+            speed: 0.1,
+            startPoint: 1
         };
         this.wave = new Wave(this.width, this.height, option);
     };
