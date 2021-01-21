@@ -1,9 +1,12 @@
 import React from 'react';
 import './App.css';
+import CanvasWavePage from './pages/canvasWavePage';
 
 function App() {
   return (
-    <div className="App" />
+      <div className="App">
+        <CanvasWavePage />
+      </div>
   );
 }
 
