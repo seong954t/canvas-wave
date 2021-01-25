@@ -20,7 +20,7 @@ class WaveService {
     updateWave = () => {
         const option: IWaveOption =  {
             fillStyle: randomColor(),
-            waveHeight: 150,
+            waveHeights: [150, 120, 200, 60, 120, 150],
             interval: 6,
             speed: 0.1,
             startPoint: 1

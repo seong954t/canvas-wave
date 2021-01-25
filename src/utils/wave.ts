@@ -3,7 +3,7 @@ import randomColor from "./randomColorUtil";
 
 export interface IWaveOption {
     fillStyle?: string;
-    waveHeight?: number;
+    waveHeights?: number[];
     interval?: number;
     speed?: number;
     startPoint?: number;
@@ -15,7 +15,7 @@ class Wave {
     private readonly wavePointSize: number;
     private readonly wavePoints: WavePoint[];
     private readonly fillStyle: string;
-    private readonly waveHeight: number;
+    private readonly waveHeights: number[];
     private readonly speed: number;
     private readonly startPoint: number;
 
@@ -24,7 +24,7 @@ class Wave {
         this.height = height;
         this.wavePointSize = Math.max((option?.interval || 0), 3);
         this.fillStyle = option?.fillStyle || randomColor();
-        this.waveHeight = option?.waveHeight || this.height / 4;
+        this.waveHeights = option?.waveHeights || [this.height / 4];
         this.speed = option?.speed || 0.1;
         this.startPoint = option?.startPoint || Math.floor(Math.random() * 10000);
         this.wavePoints = this.createWavePoints(this.wavePointSize);
@@ -33,14 +33,15 @@ class Wave {
     private createWavePoints = (size: number): WavePoint[] => {
         const interval = this.width / (size - 1);
         const positionY = this.height / 2;
-        const option: IWavePointOptions = {
-            speed: this.speed,
-            height: this.waveHeight
-        };
+        const heightsLength = this.waveHeights.length;
         return (
-            [...Array(size)].map((_, index) => (
-                new WavePoint(this.startPoint + index, interval * index, positionY, option)
-            ))
+            [...Array(size)].map((_, index) => {
+                const option: IWavePointOptions = {
+                    speed: this.speed,
+                    height: this.waveHeights[index % heightsLength]
+                };
+                return new WavePoint(this.startPoint + index, interval * index, positionY, option);
+            })
         );
     };
 
