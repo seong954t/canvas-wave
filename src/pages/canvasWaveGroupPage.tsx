@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useRef} from 'react';
-import WaveService from '../services/waveService';
 import styled from "styled-components";
 import {IWaveOption} from "../utils/wave";
 import randomColor from "../utils/randomColorUtil";
+import WaveGroupService from "../services/waveGroupService";
 
 const Frame = styled.div`
     width: 100%;
@@ -20,26 +20,38 @@ const Frame = styled.div`
     }
 `;
 
-const CanvasWavePage: FC = (() => {
+const CanvasWaveGroupPage: FC = (() => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    let waveService: WaveService | null;
-    const option: IWaveOption = {
-        fillStyle: randomColor(),
-        waveHeights: [150, 120, 200, 60, 120, 150],
+    let waveGroupService: WaveGroupService | null;
+    const options: IWaveOption[] = [{
+        fillStyle: 'rgba(255, 0, 0, 0.3)',
+        waveHeights: [150, 120, 140, 160, 180, 150],
         interval: 6,
         speed: 0.1,
-        startPoint: 1
-    };
+        startPoint: 1,
+    }, {
+        fillStyle: 'rgba(0, 255, 0, 0.3)',
+        waveHeights: [150, 160, 180, 160, 140, 150],
+        interval: 6,
+        speed: 0.1,
+        startPoint: 2,
+    }, {
+        fillStyle: 'rgba(0, 0, 255, 0.3)',
+        waveHeights: [150, 180, 160, 140, 120, 150],
+        interval: 6,
+        speed: 0.1,
+        startPoint: 3,
+    }];
 
     useEffect(() => {
         if (!canvasRef.current) return;
         const ctx = canvasRef.current.getContext('2d') || new CanvasRenderingContext2D();
-        waveService = new WaveService(ctx, option);
+        waveGroupService = new WaveGroupService(ctx, 3, options);
 
         window.addEventListener('resize', resize);
         resize();
 
-        waveService.animate();
+        waveGroupService.animate();
 
         return () => window.removeEventListener('resize', resize);
     }, [canvasRef.current]);
@@ -48,7 +60,7 @@ const CanvasWavePage: FC = (() => {
         if (!canvasRef.current) return;
 
         const { clientWidth, clientHeight }= document.body;
-        waveService?.resize(clientWidth, clientHeight);
+        waveGroupService?.resize(clientWidth, clientHeight);
 
         canvasRef.current.width = clientWidth * 2;
         canvasRef.current.height = clientHeight * 2;
@@ -65,4 +77,4 @@ const CanvasWavePage: FC = (() => {
     )
 });
 
-export default CanvasWavePage;
+export default CanvasWaveGroupPage;

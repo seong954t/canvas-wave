@@ -1,37 +1,31 @@
-import WavePoint from "../utils/wavePoint";
+import Wave, {IWaveOption} from "../utils/wave";
 
-const WAVE_POINT_SIZE = 6;
+
 class WaveService {
     ctx: CanvasRenderingContext2D;
     width: number = 0;
     height: number = 0;
-    wavePoints: WavePoint[] = [];
+    wave: Wave = new Wave(0, 0);
+    option?: IWaveOption;
 
-    constructor(ctx: CanvasRenderingContext2D) {
+    constructor(ctx: CanvasRenderingContext2D, option?: IWaveOption) {
         this.ctx = ctx;
+        this.option = option;
     };
 
     resize = (width: number, height: number) => {
         this.width = width;
         this.height = height;
-        this.updateWavePoints();
+        this.updateWave();
     };
 
-    updateWavePoints = () => {
-        const positionX = this.width / (WAVE_POINT_SIZE - 1);
-        const positionY = this.height / 2;
-        const tempWavePoints: WavePoint[] = [];
-
-        for (let i = 0; i < WAVE_POINT_SIZE; i++) {
-            tempWavePoints.push(new WavePoint(i, positionX * i, positionY));
-        }
-
-        this.wavePoints = tempWavePoints;
+    updateWave = () => {
+        this.wave = new Wave(this.width, this.height, this.option);
     };
 
     animate = () => {
         this.ctx.clearRect(0, 0, this.width, this.height);
-        this.wavePoints.forEach((wavePoint) => wavePoint.draw(this.ctx));
+        this.wave.draw(this.ctx);
         requestAnimationFrame(this.animate.bind(this));
     };
 }

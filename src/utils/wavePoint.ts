@@ -1,45 +1,28 @@
-interface options {
+export interface IWavePointOptions {
     speed?: number;
     height?: number;
 }
 
-const DEFAULT_OPTIONS = {
-    speed: 0.1,
-    height: 150
-};
-
 class WavePoint {
     x: number;
     y: number;
-    private fixedY: number;
     private sinX: number;
-    private options: options;
+    private readonly fixedY: number;
+    private readonly speed: number;
+    private readonly height: number;
 
-    constructor(index: number, x: number, y: number, options: options = DEFAULT_OPTIONS) {
+    constructor(index: number, x: number, y: number, option?: IWavePointOptions) {
         this.x = x;
         this.y = y;
         this.fixedY = y;
-        this.options = options;
         this.sinX = index;
+        this.speed = option?.speed || 0.1;
+        this.height = option?.height || 150;
     };
 
-    private update = () => {
-        const {
-            speed = DEFAULT_OPTIONS.speed,
-            height = DEFAULT_OPTIONS.height
-        } = this.options;
-
-        this.sinX += speed;
-        this.y = this.fixedY + (Math.sin(this.sinX) * height);
-    };
-
-    draw = (ctx: CanvasRenderingContext2D) => {
-        this.update();
-        ctx.beginPath();
-        ctx.fillStyle = 'red';
-        ctx.arc(this.x, this.y, 30, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
+    update = () => {
+        this.sinX += this.speed;
+        this.y = this.fixedY + (Math.sin(this.sinX) * this.height);
     };
 }
 
