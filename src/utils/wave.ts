@@ -22,7 +22,7 @@ class Wave {
     constructor(width: number, height: number, option?: IWaveOption) {
         this.width = width;
         this.height = height;
-        this.wavePointSize = Math.max((option?.interval || 0), 3);
+        this.wavePointSize = Math.max((option?.interval || 0), 6);
         this.fillStyle = option?.fillStyle || randomColor();
         this.waveHeights = option?.waveHeights || [this.height / 4];
         this.speed = option?.speed || 0.1;

@@ -1,14 +1,16 @@
 import Wave, {IWaveOption} from "../utils/wave";
-import randomColor from "../utils/randomColorUtil";
+
 
 class WaveService {
     ctx: CanvasRenderingContext2D;
     width: number = 0;
     height: number = 0;
     wave: Wave = new Wave(0, 0);
+    option?: IWaveOption;
 
-    constructor(ctx: CanvasRenderingContext2D) {
+    constructor(ctx: CanvasRenderingContext2D, option?: IWaveOption) {
         this.ctx = ctx;
+        this.option = option;
     };
 
     resize = (width: number, height: number) => {
@@ -18,14 +20,7 @@ class WaveService {
     };
 
     updateWave = () => {
-        const option: IWaveOption =  {
-            fillStyle: randomColor(),
-            waveHeights: [150, 120, 200, 60, 120, 150],
-            interval: 6,
-            speed: 0.1,
-            startPoint: 1
-        };
-        this.wave = new Wave(this.width, this.height, option);
+        this.wave = new Wave(this.width, this.height, this.option);
     };
 
     animate = () => {

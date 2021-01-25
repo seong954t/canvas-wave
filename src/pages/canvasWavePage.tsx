@@ -1,7 +1,8 @@
 import React, {FC, useEffect, useRef} from 'react';
 import WaveService from '../services/waveService';
 import styled from "styled-components";
-import WavePoint from "../utils/wavePoint";
+import {IWaveOption} from "../utils/wave";
+import randomColor from "../utils/randomColorUtil";
 
 const Frame = styled.div`
     width: 100%;
@@ -22,11 +23,18 @@ const Frame = styled.div`
 const CanvasWavePage: FC = (() => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     let waveService: WaveService | null;
+    const option: IWaveOption = {
+        fillStyle: randomColor(),
+        waveHeights: [150, 120, 200, 60, 120, 150],
+        interval: 6,
+        speed: 0.1,
+        startPoint: 1
+    };
 
     useEffect(() => {
         if (!canvasRef.current) return;
         const ctx = canvasRef.current.getContext('2d') || new CanvasRenderingContext2D();
-        waveService = new WaveService(ctx);
+        waveService = new WaveService(ctx, option);
 
         window.addEventListener('resize', resize);
         resize();
